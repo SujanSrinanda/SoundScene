@@ -1,25 +1,28 @@
 {
   "name": "SoundScene",
   "short_name": "SoundScene",
-  "start_url": ".",
+  "description": "Context-Aware Visual Sound Alert System",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0B1120",
-  "theme_color": "#38bdf8",
+  "theme_color": "#0B1120",
   "icons": [
     {
-      "src": "soundscene_logo_192.png",
+      "src": "/soundscene_logo_192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "soundscene_logo.png",
+      "src": "/soundscene_logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "soundscene_logo.svg",
+      "src": "/soundscene_logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
