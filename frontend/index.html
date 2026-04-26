@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoundScene - Context-Aware Alert System</title>
+    <!-- PWA / App Icons -->
+    <link rel="icon" type="image/svg+xml" href="soundscene_logo.svg">
+    <link rel="icon" type="image/png" href="soundscene_logo.png">
+    <link rel="apple-touch-icon" href="soundscene_logo.png">
+    <link rel="manifest" href="soundscene_manifest.json?v=3">
+    <meta name="theme-color" content="#0B1120">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="mode-idle" id="main-body">
+
+    <div id="app" class="app-container">
+        <!-- OLLI BOT -->
+        <div class="olli-stage" id="olli-bot" style="cursor: pointer;" title="Click to toggle listening">
+            <div class="olli-head">
+                <div class="olli-face">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                </div>
+            </div>
+            <div class="olli-body"></div>
+            <div class="mt-8 flex flex-col items-center opacity-30">
+                <span id="status-text" class="text-[9px] font-black text-white uppercase tracking-[0.6em]">Tap to Listen</span>
+            </div>
+        </div>
+
+        <!-- STABLE UI CARD -->
+        <div class="alert-card">
+            <div class="flex items-center gap-8">
+                <div class="icon-container">
+                    <div class="wave"></div>
+                    <div class="wave" style="animation-delay: 0.3s"></div>
+                    <span id="emoji" class="bell-icon">🔔</span>
+                </div>
+                
+                <div class="flex-1">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 id="title" class="text-2xl font-bold text-white tracking-tight">Doorbell Detected</h3>
+                        <span class="match-tag" id="match">91% Match</span>
+                    </div>
+                    <p id="desc" class="text-[#94A3B8] text-base font-medium mb-8 leading-snug">
+                        A single ring was heard at the front door.
+                    </p>
+                    <button class="btn-check" id="action-btn">Dismiss Alert</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="display: none;">
+        <select id="time-select"><option value="day">Day</option><option value="night">Night</option></select>
+        <select id="location-select"><option value="home">Home</option></select>
+    </div>
+
+    <div class="app-header">
+        <div class="logo-container">
+            <svg class="app-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <!-- Ear Shape -->
+                <path d="M45,30 C35,30 25,40 25,55 C25,70 35,80 45,80 C50,80 55,75 55,65 C55,55 50,50 45,45 C40,40 40,35 45,35" fill="none" stroke="url(#logo-grad)" stroke-width="6" stroke-linecap="round"/>
+                <!-- Sound Waves -->
+                <path d="M65,30 C75,40 75,60 65,70" fill="none" stroke="url(#logo-grad)" stroke-width="5" stroke-linecap="round" opacity="0.8">
+                    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite" />
+                </path>
+                <path d="M75,20 C90,35 90,65 75,80" fill="none" stroke="url(#logo-grad)" stroke-width="5" stroke-linecap="round" opacity="0.5">
+                    <animate attributeName="opacity" values="0.5;0.1;0.5" dur="2s" repeatCount="indefinite" />
+                </path>
+            </svg>
+            <h1 class="app-title">SoundScene</h1>
+        </div>
+        <canvas id="audio-visualizer"></canvas>
+    </div>
+
+    <!-- Top Navigation Buttons -->
+    <div class="top-nav">
+        <button id="settings-btn" class="nav-btn settings-btn" title="Settings">⚙️</button>
+        <button id="profile-btn" class="nav-btn profile-btn" title="Profile">👤</button>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal-overlay">
+        <div class="modal-content settings-expanded">
+            <div class="modal-sidebar">
+                <div class="sidebar-header">
+                    <h2>Profile</h2>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-section="info"><span>👤</span> My Info</button>
+                    <button class="nav-item" data-section="security"><span>🔒</span> Security</button>
+                </nav>
+            </div>
+            
+            <div class="modal-main">
+                <button id="close-profile" class="close-btn-absolute">&times;</button>
+                
+                <div class="settings-view active" id="view-info">
+                    <div class="view-header"><h3>User Information</h3></div>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Display Name</label>
+                                <p>How Olli will address you</p>
+                            </div>
+                            <input type="text" id="profile-name" placeholder="Enter your name" class="modern-input mt-2">
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Primary Location</label>
+                                <p>Helps Olli understand context escalation</p>
+                            </div>
+                            <select id="profile-location" class="modern-select mt-2">
+                                <option value="home">Home</option>
+                                <option value="office">Office</option>
+                                <option value="public">Public Space</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-6">
+                        <button id="save-profile-btn" class="save-btn-premium">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content settings-expanded">
+            <div class="modal-sidebar">
+                <div class="sidebar-header">
+                    <h2>Settings</h2>
+                </div>
+                <nav class="sidebar-nav">
+                    <button class="nav-item active" data-section="general"><span>⚙️</span> General</button>
+                    <button class="nav-item" data-section="audio"><span>🔊</span> Audio</button>
+                    <button class="nav-item" data-section="alerts"><span>🔔</span> Alerts</button>
+                    <button class="nav-item" data-section="accessibility"><span>👁️</span> Accessibility</button>
+                    <div class="nav-divider"></div>
+                    <button class="nav-item train-btn" data-section="train"><span>🎙️</span> Train Sound</button>
+                </nav>
+            </div>
+            
+            <div class="modal-main">
+                <button id="close-settings" class="close-btn-absolute">&times;</button>
+                
+                <div class="settings-view active" id="view-general">
+                    <div class="view-header"><h3>General Settings</h3></div>
+                    <div class="settings-group">
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Auto-Dismiss Alerts</label>
+                                <p>Automatically hide alerts after 5 seconds</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="auto-dismiss-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Dark Mode</label>
+                                <p>Switch between light and dark interface</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Notification Sound</label>
+                                <p>Play a chime when an event is detected</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Haptic Feedback</label>
+                                <p>Vibrate on critical alerts (mobile only)</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="haptic-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-view" id="view-audio">
+                    <div class="view-header"><h3>Audio Settings</h3></div>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Microphone Sensitivity</label>
+                                <p>Adjust how easily Olli hears environmental sounds</p>
+                            </div>
+                            <input type="range" id="mic-sensitivity" min="1" max="100" value="50" class="w-full mt-2">
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Noise Filtering</label>
+                                <p>Reduce background hum and steady noise</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="noise-filter-toggle" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Background Listening</label>
+                                <p>Keep detecting while app is in background</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="bg-listen-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Input Device</label>
+                                <select class="modern-select">
+                                    <option>Default System Microphone</option>
+                                    <option>External Headset</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-view" id="view-alerts">
+                    <div class="view-header"><h3>Alert Settings</h3></div>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Urgency Threshold</label>
+                                <p>When should Olli trigger a Critical state?</p>
+                            </div>
+                            <div class="segmented-control mt-2">
+                                <button class="segment" data-val="low">Low</button>
+                                <button class="segment active" data-val="medium">Medium</button>
+                                <button class="segment" data-val="high">High</button>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info mb-2">
+                                <label>Enabled Sound Classes</label>
+                            </div>
+                            <div class="checkbox-list">
+                                <label class="check-item"><input type="checkbox" checked> Doorbell</label>
+                                <label class="check-item"><input type="checkbox" checked> Dog Bark</label>
+                                <label class="check-item"><input type="checkbox" checked> Smoke Alarm</label>
+                                <label class="check-item"><input type="checkbox" checked> Car Horn</label>
+                            </div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Alert Duration (seconds)</label>
+                            </div>
+                            <input type="range" min="3" max="30" value="5" class="w-full mt-2">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-view" id="view-accessibility">
+                    <div class="view-header"><h3>Accessibility</h3></div>
+                    <div class="settings-group">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <label>Text Size</label>
+                            </div>
+                            <div class="segmented-control mt-2">
+                                <button class="segment">Small</button>
+                                <button class="segment active">Default</button>
+                                <button class="segment">Large</button>
+                            </div>
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>High Contrast</label>
+                                <p>Make text and icons more distinguishable</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item toggle-group">
+                            <div class="setting-info">
+                                <label>Simplified Mode</label>
+                                <p>Reduce visual complexity and focus on icons</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-view" id="view-train">
+                    <div class="view-header"><h3>Train Custom Sound</h3></div>
+                    
+                    <div id="wizard-container">
+                        <!-- Step 1: Record -->
+                        <div class="wizard-step active" id="step-record">
+                            <div class="step-icon">🎙️</div>
+                            <h4>Capture Sound</h4>
+                            <p>Olli needs to hear the sound at least once to learn it. Ensure you are in a quiet environment.</p>
+                            <div class="recording-visualizer-mini hidden" id="record-pulse">
+                                <div class="pulse-ring"></div>
+                                <div class="pulse-dot"></div>
+                            </div>
+                            <div class="flex gap-4 mt-6">
+                                <button id="start-record-btn" class="wizard-btn primary-red">Start Recording</button>
+                                <button id="stop-record-btn" class="wizard-btn hidden secondary">Stop</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Playback -->
+                        <div class="wizard-step" id="step-playback">
+                            <div class="step-icon">🎧</div>
+                            <h4>Review Recording</h4>
+                            <p>Listen back to ensure the sound was captured clearly without background noise.</p>
+                            <audio id="audio-playback" controls class="w-full mt-4 modern-audio"></audio>
+                            <div class="flex gap-4 mt-8">
+                                <button id="keep-audio-btn" class="wizard-btn primary">Use this sound</button>
+                                <button id="rerecord-btn" class="wizard-btn secondary">Re-record</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Metadata -->
+                        <div class="wizard-step" id="step-metadata">
+                            <div class="step-icon">📝</div>
+                            <h4>Define Sound</h4>
+                            <div class="input-grid mt-4">
+                                <div class="input-group">
+                                    <label>Sound Name</label>
+                                    <input type="text" id="custom-id" placeholder="e.g. My Door Knock">
+                                </div>
+                                <div class="input-group">
+                                    <label>Category</label>
+                                    <select id="custom-category" class="modern-select">
+                                        <option>Home</option>
+                                        <option>Office</option>
+                                        <option>Security</option>
+                                        <option>General</option>
+                                    </select>
+                                </div>
+                                <div class="input-group full-width">
+                                    <label>Description (Meaning)</label>
+                                    <input type="text" id="custom-desc" placeholder="e.g. 3 quick knocks on wood">
+                                </div>
+                                <div class="input-group">
+                                    <label>Icon (Emoji)</label>
+                                    <input type="text" id="custom-icon" placeholder="🚪" maxlength="2">
+                                </div>
+                            </div>
+                            <div class="flex gap-4 mt-8">
+                                <button id="preview-btn" class="wizard-btn primary">Next: Preview</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 4: Preview -->
+                        <div class="wizard-step" id="step-preview">
+                            <div class="step-icon">👀</div>
+                            <h4>Final Preview</h4>
+                            <p>This is how your alert will look when Olli hears this sound.</p>
+                            
+                            <div class="mini-preview-card mt-6" id="preview-card-render">
+                                <!-- Rendered dynamically -->
+                            </div>
+
+                            <div class="flex gap-4 mt-12">
+                                <button id="save-sound-btn" class="wizard-btn primary-green">Save & Train</button>
+                                <button id="back-metadata-btn" class="wizard-btn secondary">Edit Info</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Mode Selector & Demo Test -->
+    <div class="controls">
+        <div class="mode-btn" id="demo-normal">Normal</div>
+        <div class="mode-btn" id="demo-warning">Warning</div>
+        <div class="mode-btn" id="demo-critical">Critical</div>
+        <div class="mode-btn reset-btn ml-auto" id="btn-reset">Reset</div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

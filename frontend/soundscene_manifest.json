@@ -1,0 +1,22 @@
+{
+  "name": "SoundScene",
+  "short_name": "SoundScene",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0B1120",
+  "theme_color": "#38bdf8",
+  "icons": [
+    {
+      "src": "soundscene_logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "soundscene_logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

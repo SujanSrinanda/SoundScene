@@ -1,0 +1,1022 @@
+{
+    "dog_bark": {
+        "icon": "\ud83d\udc15",
+        "levels": {
+            "normal": {
+                "situation": "Dog barking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Repeated dog barking",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Aggressive continuous barking",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "rooster": {
+        "icon": "\ud83d\udc13",
+        "levels": {
+            "normal": {
+                "situation": "Rooster crowing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Multiple roosters",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Constant rooster noise",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "pig": {
+        "icon": "\ud83d\udc16",
+        "levels": {
+            "normal": {
+                "situation": "Pig oinking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud pig squeals",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Distressed pig sounds",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "cow": {
+        "icon": "\ud83d\udc04",
+        "levels": {
+            "normal": {
+                "situation": "Cow mooing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Herd of cows mooing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud distressed mooing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "frog": {
+        "icon": "\ud83d\udc38",
+        "levels": {
+            "normal": {
+                "situation": "Frog croaking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Multiple frogs",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud chorus of frogs",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "cat": {
+        "icon": "\ud83d\udc08",
+        "levels": {
+            "normal": {
+                "situation": "Cat meowing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud cat meowing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Cat fighting/yowling",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "hen": {
+        "icon": "\ud83d\udc14",
+        "levels": {
+            "normal": {
+                "situation": "Hen clucking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud hen noises",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Disturbed hens",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "insects": {
+        "icon": "\ud83e\udd97",
+        "levels": {
+            "normal": {
+                "situation": "Insects chirping",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud insect swarm",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Overwhelming insect noise",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "sheep": {
+        "icon": "\ud83d\udc11",
+        "levels": {
+            "normal": {
+                "situation": "Sheep baaing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Flock of sheep",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud distressed sheep",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "crow": {
+        "icon": "\ud83d\udc26\u200d\u2b1b",
+        "levels": {
+            "normal": {
+                "situation": "Crow cawing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Multiple crows",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Flock of crows cawing loudly",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "rain": {
+        "icon": "\ud83c\udf27\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Light rain",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Heavy rain",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Torrential downpour",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "sea_waves": {
+        "icon": "\ud83c\udf0a",
+        "levels": {
+            "normal": {
+                "situation": "Gentle waves",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Crashing waves",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Violent sea waves",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "crackling_fire": {
+        "icon": "\ud83d\udd25",
+        "levels": {
+            "normal": {
+                "situation": "Small crackling fire",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Large fire crackling",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Raging fire sounds",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "crickets": {
+        "icon": "\ud83e\udd97",
+        "levels": {
+            "normal": {
+                "situation": "Crickets chirping",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud crickets",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Deafening cricket noise",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "chirping_birds": {
+        "icon": "\ud83d\udc26",
+        "levels": {
+            "normal": {
+                "situation": "Birds chirping",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud bird calls",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Flock of noisy birds",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "water_drops": {
+        "icon": "\ud83d\udca7",
+        "levels": {
+            "normal": {
+                "situation": "Water dripping",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Continuous dripping",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Heavy water leak",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "wind": {
+        "icon": "\ud83c\udf2c\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Gentle breeze",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Strong winds",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Gale force winds/howling",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "pouring_water": {
+        "icon": "\ud83d\udeb0",
+        "levels": {
+            "normal": {
+                "situation": "Water pouring",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Continuous pouring",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Water spilling/flooding",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "thunderstorm": {
+        "icon": "\u26c8\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Distant thunder",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Thunderstorm overhead",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud violent lightning strikes",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "crying_baby": {
+        "icon": "\ud83d\udc76",
+        "levels": {
+            "normal": {
+                "situation": "Baby fussing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Baby crying loudly",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Baby screaming continuously",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "sneezing": {
+        "icon": "\ud83e\udd27",
+        "levels": {
+            "normal": {
+                "situation": "Someone sneezing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Repeated sneezing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Continuous violent sneezing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "clapping": {
+        "icon": "\ud83d\udc4f",
+        "levels": {
+            "normal": {
+                "situation": "Light clapping",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Applause",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud continuous applause",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "breathing": {
+        "icon": "\ud83d\ude2e\u200d\ud83d\udca8",
+        "levels": {
+            "normal": {
+                "situation": "Heavy breathing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Labored breathing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Gasping for air",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "coughing": {
+        "icon": "\ud83d\ude37",
+        "levels": {
+            "normal": {
+                "situation": "Someone coughing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Repeated coughing fits",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Severe continuous coughing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "footsteps": {
+        "icon": "\ud83d\udc63",
+        "levels": {
+            "normal": {
+                "situation": "Footsteps nearby",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Heavy/rapid footsteps",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Someone running/fleeing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "laughing": {
+        "icon": "\ud83d\ude02",
+        "levels": {
+            "normal": {
+                "situation": "Light laughter",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud laughing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Hysterical laughter",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "brushing_teeth": {
+        "icon": "\ud83e\udea5",
+        "levels": {
+            "normal": {
+                "situation": "Brushing teeth",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Vigorous brushing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud electric toothbrush",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "snoring": {
+        "icon": "\ud83d\ude34",
+        "levels": {
+            "normal": {
+                "situation": "Light snoring",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Heavy snoring",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud sleep apnea snoring",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "drinking_sipping": {
+        "icon": "\ud83e\udd64",
+        "levels": {
+            "normal": {
+                "situation": "Sipping a drink",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud drinking/gulping",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Choking while drinking",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "door_wood_knock": {
+        "icon": "\ud83d\udeaa",
+        "levels": {
+            "normal": {
+                "situation": "Single knock on door",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Repeated knocking",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Frantic pounding on door",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "mouse_click": {
+        "icon": "\ud83d\uddb1\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Mouse clicking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Rapid clicking",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Frantic continuous clicking",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "keyboard_typing": {
+        "icon": "\u2328\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Typing on keyboard",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Fast typing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Aggressive continuous typing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "door_wood_creaks": {
+        "icon": "\ud83d\udeaa",
+        "levels": {
+            "normal": {
+                "situation": "Door creaking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud door creak",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Multiple doors creaking open",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "can_opening": {
+        "icon": "\ud83e\udd6b",
+        "levels": {
+            "normal": {
+                "situation": "Can opening",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Multiple cans opening",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud continuous popping",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "washing_machine": {
+        "icon": "\ud83e\uddfa",
+        "levels": {
+            "normal": {
+                "situation": "Washing machine running",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud spin cycle",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Washing machine violently shaking",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "vacuum_cleaner": {
+        "icon": "\ud83e\uddf9",
+        "levels": {
+            "normal": {
+                "situation": "Vacuum cleaner",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud vacuuming nearby",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Vacuum running continuously",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "clock_alarm": {
+        "icon": "\u23f0",
+        "levels": {
+            "normal": {
+                "situation": "Alarm beeping",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud alarm ringing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Continuous ignored alarm",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "clock_tick": {
+        "icon": "\u23f1\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Clock ticking",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud ticking",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Frantic ticking/countdown",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "glass_breaking": {
+        "icon": "\ud83d\udca5",
+        "levels": {
+            "normal": {
+                "situation": "Large window shattering violently",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "medium": {
+                "situation": "Large window shattering violently",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "critical": {
+                "situation": "Large window shattering violently",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "toilet_flush": {
+        "icon": "\ud83d\udebd",
+        "levels": {
+            "normal": {
+                "situation": "Toilet flushing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Repeated flushing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Toilet overflowing/running continuously",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "helicopter": {
+        "icon": "\ud83d\ude81",
+        "levels": {
+            "normal": {
+                "situation": "Helicopter in distance",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Helicopter nearby",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Helicopter directly overhead",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "chainsaw": {
+        "icon": "\ud83e\ude9a",
+        "levels": {
+            "normal": {
+                "situation": "Chainsaw dangerously close",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "medium": {
+                "situation": "Chainsaw dangerously close",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "critical": {
+                "situation": "Chainsaw dangerously close",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "siren": {
+        "icon": "\ud83d\udea8",
+        "levels": {
+            "normal": {
+                "situation": "Loud siren directly outside",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "medium": {
+                "situation": "Loud siren directly outside",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "critical": {
+                "situation": "Loud siren directly outside",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "car_horn": {
+        "icon": "\ud83d\ude97",
+        "levels": {
+            "normal": {
+                "situation": "Short car horn",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Repeated honking",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Continuous blaring car horn",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "engine": {
+        "icon": "\u2699\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Engine idling",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud engine revving",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Engine backfiring/failing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "train": {
+        "icon": "\ud83d\ude82",
+        "levels": {
+            "normal": {
+                "situation": "Distant train horn",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Train approaching",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Loud train passing by closely",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "church_bells": {
+        "icon": "\u26ea",
+        "levels": {
+            "normal": {
+                "situation": "Church bells ringing",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Loud church bells",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Continuous frantic bell ringing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "airplane": {
+        "icon": "\u2708\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Airplane high above",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Low flying airplane",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Extremely loud low-altitude jet",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "fireworks": {
+        "icon": "\ud83c\udf86",
+        "levels": {
+            "normal": {
+                "situation": "Explosive fireworks nearby",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "medium": {
+                "situation": "Explosive fireworks nearby",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            },
+            "critical": {
+                "situation": "Explosive fireworks nearby",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "hand_saw": {
+        "icon": "\ud83e\ude9a",
+        "levels": {
+            "normal": {
+                "situation": "Hand saw cutting",
+                "action": "Acknowledge",
+                "base_confidence": 0.5
+            },
+            "medium": {
+                "situation": "Continuous sawing",
+                "action": "Investigate",
+                "base_confidence": 0.7
+            },
+            "critical": {
+                "situation": "Aggressive fast sawing",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    },
+    "calling_user_name": {
+        "icon": "\ud83d\udde3\ufe0f",
+        "levels": {
+            "normal": {
+                "situation": "Someone is calling your name!",
+                "action": "Respond",
+                "base_confidence": 0.8
+            },
+            "medium": {
+                "situation": "Repeatedly calling your name",
+                "action": "Investigate",
+                "base_confidence": 0.8
+            },
+            "critical": {
+                "situation": "Screaming your name urgently!",
+                "action": "Immediate Action",
+                "base_confidence": 0.9
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+# Datasets
+UrbanSound8K/
+ESC-50-master/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Model weights (if you want to keep them local, but best_model.pth is small enough to push)
+# ml/models/best_model.pth
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
