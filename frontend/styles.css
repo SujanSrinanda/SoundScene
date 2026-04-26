@@ -168,6 +168,11 @@ body {
 .mode-critical .bell-icon { animation: ring-heavy-pulse 0.6s infinite ease-in-out; }
 .mode-critical .wave { animation: sonar-intense 0.7s infinite ease-out; }
 
+@keyframes slideDown {
+    from { transform: translateY(-40px) translateX(-50%); opacity: 0; }
+    to { transform: translateY(0) translateX(-50%); opacity: 1; }
+}
+
 /* KEYFRAMES */
 @keyframes idle-float {
     0%, 100% { transform: translate(-50%, 0) scale(var(--olli-scale)); }
@@ -713,14 +718,13 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px;
 
     /* CARDS: Top Floating Slide-Down */
     .alert-card {
-        top: -100%;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%);
-        width: 94%;
-        padding: 20px;
-        border-radius: 20px;
-        z-index: 3000;
+        position: fixed;
+        top: 20px;
+        left: 5% !important;
+        width: 90% !important;
+        transform: none !important;
+        z-index: 9999;
+        animation: slideDown 0.4s ease;
     }
 
     /* CONTROLS: Better wrapping for small screens */
