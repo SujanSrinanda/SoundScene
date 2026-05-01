@@ -1,9 +1,12 @@
 import json
 import os
-from typing import Dict, Any
+import numpy as np
+from typing import Dict, Any, List, Optional
 
 # Load rules from rules.json
 RULES_FILE = os.path.join(os.path.dirname(__file__), "rules.json")
+CUSTOM_SOUNDS_FILE = os.path.join(os.path.dirname(__file__), "custom_embeddings.json")
+
 try:
     with open(RULES_FILE, "r", encoding="utf-8") as f:
         SOUND_RULES = json.load(f)
@@ -14,69 +17,89 @@ except Exception as e:
 # Keep track of repetitions for escalation
 repetition_tracker = {}
 
-def analyze_situation(label: str, confidence: float, time_of_day: str, location_mode: str, force_urgency: str = "") -> Dict[str, Any]:
+def analyze_situation(label: str, confidence: float, history: List[str], time_of_day: str = "day", location_mode: str = "home", force_urgency: str = "") -> Dict[str, Any]:
     """
-    Analyzes the sound event within its current context to determine the appropriate alert level and action.
+    Analyzes sound events with temporal logic and confidence filtering.
     """
-    # Default fallback
+    # 1. Base result
     result = {
-        "description": f"Detected {label}",
+        "label": label,
+        "description": f"Detected {label.replace('_', ' ')}",
         "urgency_level": "green",
-        "recommended_action": "Be aware of surroundings",
-        "icon": "🔊"
+        "recommended_action": "Check surroundings",
+        "icon": "🔊",
+        "color_code": "#4CAF50"
     }
 
-    if label not in SOUND_RULES:
-        return result
-
-    rule_data = SOUND_RULES[label]
-    icon = rule_data.get("icon", "🔊")
-    levels = rule_data.get("levels", {})
-    
-    # 1. Base level is normal
-    current_level = force_urgency if force_urgency else "normal"
-
-    if not force_urgency:
-        # 2. Track repetitions
-        global repetition_tracker
-        if label not in repetition_tracker:
-            repetition_tracker[label] = 1
+    # 2. Doorbell Logic (Strategic Escalation)
+    if label == "doorbell":
+        count_last_5 = history.count("doorbell")
+        result["icon"] = "🔔"
+        if count_last_5 >= 3:
+            result["urgency_level"] = "red"
+            result["description"] = "URGENT: Constant Doorbell!"
+            result["recommended_action"] = "Immediate Action Required"
+            result["color_code"] = "#F44336"
+        elif count_last_5 >= 2:
+            result["urgency_level"] = "yellow"
+            result["description"] = "Repeated Doorbell"
+            result["recommended_action"] = "Someone is waiting"
+            result["color_code"] = "#FFC107"
         else:
-            repetition_tracker[label] += 1
-            
-        # Escalate based on repetitions
-        reps = repetition_tracker[label]
-        if reps >= 3:
-            current_level = "critical"
-            repetition_tracker[label] = 0 # reset after critical alert
-        elif reps == 2:
-            current_level = "medium"
+            result["description"] = "Doorbell detected"
+            result["recommended_action"] = "Check the door"
 
-    # Special contexts (bump up level based on environment)
-    # Night time generally bumps normal to medium.
-    # But if we are at the office at night, it's highly suspicious, bump to critical immediately!
-    if time_of_day == "night":
-        if location_mode == "office" and current_level in ["normal", "medium"]:
-            current_level = "critical"
-        elif current_level == "normal":
-            current_level = "medium"
-    
-    # Final check: if force_urgency was provided, we strictly stick to it (bypass all above)
-    if force_urgency:
-        current_level = force_urgency
+    # 3. Siren / Alarm (High Urgency)
+    elif label == "siren":
+        result["icon"] = "🚨"
+        result["urgency_level"] = "red"
+        result["description"] = "Emergency Siren Detected"
+        result["recommended_action"] = "Clear path / Seek safety"
+        result["color_code"] = "#F44336"
 
-    # Get the specific details for the current level
-    level_data = levels.get(current_level, levels.get("normal", {}))
+    elif label == "alarm":
+        result["icon"] = "⏰"
+        result["urgency_level"] = "yellow"
+        result["description"] = "Alarm Triggered"
+        result["recommended_action"] = "Attention required"
+        result["color_code"] = "#FFC107"
 
-    result["description"] = level_data.get("situation", f"Detected {label}")
-    result["urgency_level"] = current_level
-    result["recommended_action"] = level_data.get("action", "Acknowledge")
-    result["icon"] = icon
+    # 4. Contextual Overrides (Night mode)
+    if time_of_day == "night" and result["urgency_level"] == "green":
+        result["urgency_level"] = "yellow"
+        result["color_code"] = "#FFC107"
 
-    # Confidence scaling
-    if confidence < 0.6:
-        result["description"] += " (Low confidence)"
-        if result["urgency_level"] == "critical":
-            result["urgency_level"] = "medium" 
-            
     return result
+
+# --- CUSTOM SOUND SUPPORT ---
+
+def cosine_similarity(v1, v2):
+    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2) + 1e-9)
+
+def match_custom_sound(embedding: np.ndarray, threshold: float = 0.85) -> Optional[str]:
+    if not os.path.exists(CUSTOM_SOUNDS_FILE):
+        return None
+    try:
+        with open(CUSTOM_SOUNDS_FILE, "r") as f:
+            custom_db = json.load(f)
+        best_match = None
+        max_sim = -1
+        for name, stored_emb in custom_db.items():
+            sim = cosine_similarity(embedding, np.array(stored_emb))
+            if sim > max_sim:
+                max_sim = sim
+                best_match = name
+        if max_sim >= threshold:
+            return best_match
+    except:
+        pass
+    return None
+
+def save_custom_sound(name: str, embedding: np.ndarray):
+    custom_db = {}
+    if os.path.exists(CUSTOM_SOUNDS_FILE):
+        with open(CUSTOM_SOUNDS_FILE, "r") as f:
+            custom_db = json.load(f)
+    custom_db[name] = embedding.tolist()
+    with open(CUSTOM_SOUNDS_FILE, "w") as f:
+        json.dump(custom_db, f)

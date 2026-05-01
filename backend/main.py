@@ -9,11 +9,11 @@ import uuid
 import os
 
 from context_engine import analyze_situation
-from ml_service import process_audio_or_simulate
+from ml_service import process_audio
 
 app = FastAPI(title="SoundScene API")
 
-# Allow CORS for frontend
+# Task 7: CORS Fix (Critical for Production/Ngrok)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,6 +21,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.middleware("http")
+async def log_requests(request, call_next):
+    # Task 8: Debug Logging (Backend)
+    print(f"DEBUG: [API] {request.method} {request.url.path}")
+    response = await call_next(request)
+    print(f"DEBUG: [API] Response status: {response.status_code}")
+    return response
 
 class DetectRequest(BaseModel):
     audio_data: str = "" 
@@ -35,7 +43,7 @@ event_history: List[Dict[str, Any]] = []
 user_profile = {"name": "", "location": "home"}
 
 class ProfileRequest(BaseModel):
-    name: str
+    displayName: str
     location: str = "home"
 
 class CustomSoundRequest(BaseModel):
@@ -45,11 +53,25 @@ class CustomSoundRequest(BaseModel):
     category: str = "General"
     audio_b64: str = ""
 
-@app.post("/profile")
+@app.post("/save-profile")
 async def update_profile(request: ProfileRequest):
-    user_profile["name"] = request.name
-    user_profile["location"] = request.location
-    return {"status": "success"}
+    print(f"Received profile update: displayName={request.displayName}, location={request.location}")
+    try:
+        if not request.displayName or not request.displayName.strip():
+            return {"success": False, "message": "Display name is required"}
+            
+        user_profile["name"] = request.displayName.strip()
+        user_profile["location"] = request.location
+        
+        return {
+            "success": True, 
+            "message": "Profile updated successfully"
+        }
+    except Exception as e:
+        return {
+            "success": False, 
+            "message": f"Server error: {str(e)}"
+        }
 
 @app.get("/profile")
 async def get_profile():
@@ -57,102 +79,76 @@ async def get_profile():
 
 @app.post("/custom_sound")
 async def add_custom_sound(request: CustomSoundRequest):
-    from context_engine import SOUND_RULES, RULES_FILE
+    from context_engine import SOUND_RULES, RULES_FILE, save_custom_sound
+    from ml_service import inference_system
     import json
     import os
     import base64
     
-    # Save audio if present
-    if request.audio_b64:
-        try:
-            if "," in request.audio_b64:
-                header, encoded = request.audio_b64.split(",", 1)
-            else:
-                encoded = request.audio_b64
-                
-            audio_data = base64.b64decode(encoded)
-            save_dir = os.path.join(os.path.dirname(__file__), "../dataset/custom")
-            os.makedirs(save_dir, exist_ok=True)
-            file_path = os.path.join(save_dir, f"{request.label}.webm")
-            with open(file_path, "wb") as f:
-                f.write(audio_data)
-        except Exception as e:
-            print(f"Failed to save audio file: {e}")
+    # 1. Decode and Save Audio File
+    try:
+        encoded = request.audio_b64.split(",")[-1] if "," in request.audio_b64 else request.audio_b64
+        audio_bytes = base64.b64decode(encoded)
+        
+        # 2. Extract Embedding for Fingerprinting (Task: Custom Sound Support)
+        features, embedding = inference_system.extract_features(audio_bytes)
+        if embedding is not None:
+            save_custom_sound(request.label, embedding)
+            print(f"DEBUG: [ML] Fingerprinted custom sound: {request.label}")
 
-    SOUND_RULES[request.label] = {
-        "icon": request.icon,
-        "category": request.category,
-        "is_custom": True,
-        "levels": {
-            "normal": {
-                "situation": request.description,
-                "action": "Check this custom event",
-                "base_confidence": 0.95
-            },
-            "medium": {
-                "situation": f"Repeated: {request.description}",
-                "action": "Investigate",
-                "base_confidence": 0.97
-            },
-            "critical": {
-                "situation": f"Persistent: {request.description}",
-                "action": "Immediate Action",
-                "base_confidence": 0.99
+        # Save metadata to rules.json
+        SOUND_RULES[request.label] = {
+            "icon": request.icon,
+            "category": request.category,
+            "is_custom": True,
+            "levels": {
+                "normal": {"situation": request.description, "action": "Check surroundings"}
             }
         }
-    }
-    try:
         with open(RULES_FILE, "w", encoding="utf-8") as f:
             json.dump(SOUND_RULES, f, indent=4)
-    except Exception:
-        pass
-        
-    return {"status": "success"}
+            
+        return {"success": True, "message": f"Learned sound: {request.label}"}
+    except Exception as e:
+        print(f"DEBUG: [API] Custom Sound Error: {e}")
+        return {"success": False, "message": str(e)}
 
 @app.get("/custom_sounds")
 async def get_custom_sounds():
     from context_engine import SOUND_RULES
     customs = [k for k, v in SOUND_RULES.items() if v.get("is_custom")]
     return {"sounds": customs}
-
 @app.post("/detect")
 async def detect_sound(request: DetectRequest):
-    from context_engine import SOUND_RULES
-    # 1. Pass through ML Service (or simulation)
-    ml_result = process_audio_or_simulate(request.audio_data, request.simulate_label)
-    
-    if not ml_result:
-        return {"status": "no_event"}
+    print(f"DEBUG: [Backend] Received detect request: audio_data length={len(request.audio_data)}, time_of_day={request.time_of_day}, location_mode={request.location_mode}")
+    try:
+        if request.simulate_label:
+            # Simulate ML output with expected keys
+            ml_result = analyze_situation(request.simulate_label, 0.99, [request.simulate_label]*5, request.time_of_day, request.location_mode)
+            ml_result["confidence"] = 0.99
+        else:
+            # Task 2 & 8: Process real audio using the global system
+            print("DEBUG: [Backend] Processing audio...")
+            ml_result = process_audio(request.audio_data)
+            print("DEBUG: [Backend] ML result:", ml_result)
 
-    # 2. Context Engine analysis
-    situation = analyze_situation(
-        label=ml_result["label"],
-        confidence=ml_result["confidence"],
-        time_of_day=request.time_of_day,
-        location_mode=request.location_mode,
-        force_urgency=request.force_urgency
-    )
-    
-    # 3. Create event response
-    is_custom = SOUND_RULES.get(ml_result["label"], {}).get("is_custom", False)
-    event = {
-        "id": str(uuid.uuid4()),
-        "timestamp": datetime.now().isoformat(),
-        "sound": ml_result["label"],
-        "confidence": round(ml_result["confidence"], 2),
-        "situation": situation["description"],
-        "urgency": situation["urgency_level"],
-        "action": situation["recommended_action"],
-        "icon": situation["icon"],
-        "is_custom": is_custom
-    }
-    
-    # 4. Save to history (keep last 5)
-    event_history.insert(0, event)
-    if len(event_history) > 5:
-        event_history.pop()
-        
-    return event
+        if not ml_result:
+            print("DEBUG: [Backend] No ML result, returning analyzing")
+            return {"status": "analyzing"}
+
+        # Task 5: Preserve and return valid JSON structure
+        event = {
+            "id": str(uuid.uuid4()),
+            "timestamp": datetime.now().isoformat(),
+            **ml_result
+        }
+        print("DEBUG: [Backend] Prediction output:", event)
+        return event
+
+    except Exception as e:
+        print(f"DEBUG: [Backend] Request Error: {e}")
+        return {"status": "error", "message": str(e)}
+
 
 @app.post("/detect_custom")
 async def detect_custom(request: Dict[str, str]):
